@@ -8,7 +8,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 
 from .forms import TaskForm, CommentForm
-from .mixins import PermissionDenied, UserIsOwnerMixin
+from .mixins import PermissionDenied, StatusMixin, UserIsOwnerMixin
 from .models import Task, Comment
 
 
@@ -51,7 +51,7 @@ class TaskCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class TaskUpdateView(LoginRequiredMixin, UserIsOwnerMixin, UpdateView):
+class TaskUpdateView(LoginRequiredMixin, UserIsOwnerMixin, UpdateView, StatusMixin):
     model = Task
     form_class = TaskForm
     template_name = "tasks/task_form.html"

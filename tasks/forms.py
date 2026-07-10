@@ -30,7 +30,7 @@ class TaskFilterForm(forms.Form):
     due_date = forms.DateField(
         required=False,
         label='Дата виконання',
-        widget=forms.DateInput(attrs={'type': 'date'})
+        widget=forms.DateInput(attrs={'type': 'date'})   
     )
 
 
