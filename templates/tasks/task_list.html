@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Список завдань{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Список завдань</h2>
+
+    <a href="{% url 'tasks:task_create' %}" class="btn btn-primary mb-3">
+        + Додати завдання
+    </a>
+
+    {% if object_list %}
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>Назва</th>
+                    <th>Статус</th>
+                    <th>Дії</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for task in object_list %}
+                <tr>
+                    <td>{{ task.title }}</td>
+                    <td>{{ task.status }}</td>
+                    <td>
+                        <a href="{% url 'tasks:task_detail' task.pk %}" class="btn btn-info btn-sm">
+                            Деталі
+                        </a>
+
+                        <a href="{% url 'tasks:task_update' task.pk %}" class="btn btn-warning btn-sm">
+                            Редагувати
+                        </a>
+
+                        <a href="{% url 'tasks:task_delete' task.pk %}" class="btn btn-danger btn-sm">
+                            Видалити
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Завдань поки що немає.</p>
+    {% endif %}
+</div>
+{% endblock %}
