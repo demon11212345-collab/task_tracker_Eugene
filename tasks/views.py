@@ -10,7 +10,8 @@ from django.contrib.auth import login
 from .forms import TaskForm, CommentForm
 from .mixins import PermissionDenied, StatusMixin, UserIsOwnerMixin
 from .models import Task, Comment
-
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
 
 class TaskListView(ListView):
     model = Task
@@ -99,3 +100,16 @@ class CommentDeleteView(LoginRequiredMixin, DeleteView):
         if self.get_object().author != request.user:
             raise PermissionDenied
         return super().dispatch(request, *args, **kwargs)
+
+
+
+@login_required
+def comment_like(request, pk):
+    comment = get_object_or_404(Comment, pk=pk)
+
+    if request.user in comment.likes.all():
+        comment.likes.remove(request.user)
+    else:
+        comment.likes.add(request.user)
+
+    return redirect("tasks:task_detail", pk=comment.task.pk)

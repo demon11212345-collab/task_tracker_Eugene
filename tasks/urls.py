@@ -9,6 +9,7 @@ from tasks.views import (
     TaskDetailView,
     TaskListView,
     TaskUpdateView,
+    comment_like,
 )
 
 app_name = "tasks"
@@ -21,7 +22,11 @@ urlpatterns = [
     path("<int:pk>/delete/", TaskDeleteView.as_view(), name="task_delete"),
     path("register/", RegisterView.as_view(), name="register"),
     path("comment/<int:pk>/edit/", CommentEditView.as_view(), name="comment_edit"),
-    path(
-        "comment/<int:pk>/delete/", CommentDeleteView.as_view(), name="comment_delete"
-    ),
+    path("comment/<int:pk>/delete/", CommentDeleteView.as_view(), name="comment_delete"),
+    path("comment/<int:pk>/like/", comment_like, name="comment_like"),
+    path("register/", RegisterView.as_view(), name="register"),
 ]
+
+  
+
+   

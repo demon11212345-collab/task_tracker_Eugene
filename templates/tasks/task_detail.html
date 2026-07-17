@@ -28,11 +28,11 @@
                 {{ object.created_at }}
             </p>
 
-            {% if object.deadline %}
-                <p>
-                    <strong>Термін виконання:</strong>
-                    {{ object.deadline }}
-                </p>
+            {% if object.due_date %}
+            <p>
+                <strong>Термін виконання:</strong>
+                {{ object.due_date }}
+            </p>
             {% endif %}
 
             <a href="{% url 'tasks:task_update' object.pk %}" class="btn btn-warning">
@@ -48,5 +48,65 @@
             </a>
         </div>
     </div>
+
+    <hr>
+
+    <h3>Коментарі</h3>
+
+    {% if user.is_authenticated %}
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+
+                <button type="submit" class="btn btn-primary">
+                    Додати коментар
+                </button>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+
+    {% for comment in comments %}
+    <div class="card mb-3">
+        <div class="card-body">
+
+            <strong>{{ comment.author.username }}</strong>
+            <small class="text-muted">
+                ({{ comment.created_at|date:"d.m.Y H:i" }})
+            </small>
+
+            <p class="mt-2">
+                {{ comment.content }}
+            </p>
+
+            <form action="{% url 'tasks:comment_like' comment.pk %}" method="post">
+                {% csrf_token %}
+                <button type="submit"
+                        class="btn btn-link text-decoration-none p-0">
+
+                    ❤️ {{ comment.likes.count }}
+
+                </button>
+            </form>
+
+            {% if user == comment.author %}
+            <div class="mt-2">
+                <a href="{% url 'tasks:comment_edit' comment.pk %}" class="btn btn-sm btn-warning">
+                    Редагувати
+                </a>
+
+                <a href="{% url 'tasks:comment_delete' comment.pk %}" class="btn btn-sm btn-danger">
+                    Видалити
+                </a>
+            </div>
+            {% endif %}
+
+        </div>
+    </div>
+    {% empty %}
+        <p>Коментарів поки що немає.</p>
+    {% endfor %}
 </div>
 {% endblock %}
